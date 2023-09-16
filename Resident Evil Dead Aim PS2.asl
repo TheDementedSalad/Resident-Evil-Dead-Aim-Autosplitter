@@ -35,11 +35,9 @@ startup
 		new MemoryWatcher<int>(wram + 0x59A54) {Name = "PAL_IGT"},
 		new MemoryWatcher<float>(wram + 0xD1FF8) {Name = "PAL_MS"},
 		new MemoryWatcher<int>(wram + 0x2684C0) {Name = "PAL_Map"},
-		
-		{
-			
-		settings.Add("Area", false, "Area Splitter - Splits every area change");
 	});
+	
+	settings.Add("Area", false, "Area Splitter - Splits every area change");
 }
 
 update
