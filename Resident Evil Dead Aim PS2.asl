@@ -8,7 +8,7 @@ state("LiveSplit") {}
 
 startup
 {
-	// Creates a persistent instance of the PS1 class (for PS1 emulators)
+	// Creates a persistent instance of the PS2 class (for PS2 emulators)
 	Assembly.Load(File.ReadAllBytes("Components/emu-help-v2")).CreateInstance("PS2");
 	
 	vars.bitCheck = new Func<byte, int, bool>((byte val, int b) => (val & (1 << b)) != 0);
