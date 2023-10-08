@@ -176,8 +176,6 @@ init
 
 update
 {
-	if (!vars.Helper.Update()) return false;
-	
 	if(timer.CurrentPhase == TimerPhase.NotRunning)
 	{
 		vars.completedSplits = new bool[50];
@@ -304,11 +302,4 @@ isLoading
 reset
 {
 	return current.Time == 0 && current.Map == 0;
-}
-
-
-shutdown
-{
-	// Please don't remove this line from this block
-	vars.Helper.Dispose();
 }
