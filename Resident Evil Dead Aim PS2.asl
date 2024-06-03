@@ -16,32 +16,9 @@ startup
 	// You can look up for known IDs on https://psxdatacenter.com/
 	vars.Helper.Load = (Func<dynamic, bool>)(emu => 
     {
-		emu.MakeString("NTSCU_Gamecode", 10, 0x307397);		//SLUS-20669
-        emu.Make<int>("NTSCU_IGT", 0x30D054);
-        emu.Make<float>("NTSCU_MS", 0x3854F0);
-		emu.Make<int>("NTSCU_Map", 0x5189C0);
-		emu.Make<int>("NTSCU_Results", 0x2A4054);
-		//Key Items
-		emu.Make<byte>("U_FirstC", 0x2A3E1C);
-		emu.Make<byte>("U_GuestK", 0x2A3E00);
-		emu.Make<byte>("U_IDCard", 0x2A3E04);
-		emu.Make<byte>("U_MaintK", 0x2A3E08);
-		emu.Make<byte>("U_Handle", 0x2A3E0C);
-		emu.Make<byte>("U_Crowbar", 0x2A3E10);
-		emu.Make<byte>("U_CrewK", 0x2A3E14);
-		emu.Make<byte>("U_RecR", 0x2A3E18);
-		emu.Make<byte>("U_SecK", 0x2A3EDC);
-		emu.Make<byte>("U_ElevL", 0x2A3E24);
-		emu.Make<byte>("U_PodB", 0x2A3E28);
-		emu.Make<byte>("U_DigiR", 0x2A3E2C);
-		emu.Make<byte>("U_DigiRF", 0x2A3E30);
-		emu.Make<byte>("U_BackK", 0x2A3E34);
-		
-		
-		
 		emu.MakeString("NTSCJ_Gamecode", 10, 0x2CEE17);		//SLPM-65245
-        emu.Make<int>("NTSCJ_IGT", 0x262DBC);
-        emu.Make<float>("NTSCJ_MS", 0x31A3B0);
+        	emu.Make<int>("NTSCJ_IGT", 0x262DBC);
+        	emu.Make<float>("NTSCJ_MS", 0x31A3B0);
 		emu.Make<int>("NTSCJ_Map", 0x3986C0);
 		emu.Make<int>("NTSCJ_Results", 0x254144);
 		//Key Items
@@ -59,29 +36,6 @@ startup
 		emu.Make<byte>("J_DigiR", 0x262B9C);
 		emu.Make<byte>("J_DigiRF", 0x262BA0);
 		emu.Make<byte>("J_BackK", 0x262BA4);
-		
-		
-		
-		emu.MakeString("PAL_Gamecode", 10, 0x3082CC);		//SLES-51448
-        emu.Make<int>("PAL_IGT", 0x30DA54);
-        emu.Make<float>("PAL_MS", 0x385FF8);
-		emu.Make<int>("PAL_Map", 0x51C4C0);
-		emu.Make<int>("PAL_Results", 0x2DE164);
-		//Key Items
-		emu.Make<byte>("P_FirstC", 0x2A481C);
-		emu.Make<byte>("P_GuestK", 0x2A4800);
-		emu.Make<byte>("P_IDCard", 0x2A4804);
-		emu.Make<byte>("P_MaintK", 0x2A4808);
-		emu.Make<byte>("P_Handle", 0x2A480C);
-		emu.Make<byte>("P_Crowbar", 0x2A4810);
-		emu.Make<byte>("P_CrewK", 0x2A4814);
-		emu.Make<byte>("P_RecR", 0x2A4818);
-		emu.Make<byte>("P_SecK", 0x2A48DC);
-		emu.Make<byte>("P_ElevL", 0x2A4824);
-		emu.Make<byte>("P_PodB", 0x2A4828);
-		emu.Make<byte>("P_DigiR", 0x2A482C);
-		emu.Make<byte>("P_DigiRF", 0x2A4830);
-		emu.Make<byte>("P_BackK", 0x2A4834);
         return true;
     });
 	
@@ -181,27 +135,7 @@ update
 		vars.completedSplits = new bool[50];
 	}
 	
-	if(current.NTSCU_Gamecode == "SLUS-20669"){
-		current.Time = current.NTSCU_IGT + current.NTSCU_MS;
-		current.Map = current.NTSCU_Map;
-		current.Results = current.NTSCU_Results;
-		//Items
-		current.FirstC = current.U_FirstC;
-		current.GuestK = current.U_GuestK;
-		current.IDCard = current.U_IDCard;
-		current.MaintK = current.U_MaintK;
-		current.Handle = current.U_Handle;
-		current.Crowbar = current.U_Crowbar;
-		current.CrewK = current.U_CrewK;
-		current.RecR = current.U_RecR;
-		current.SecK = current.U_SecK;
-		current.ElevL = current.U_ElevL;
-		current.PodB = current.U_PodB;
-		current.DigiR = current.U_DigiR;
-		current.DigiRF = current.U_DigiRF;
-		current.BackK = current.U_BackK;
-	}
-	else if(current.NTSCJ_Gamecode == "SLPM-65245"){
+	if(current.NTSCJ_Gamecode == "SLPM-65245"){
 		current.Time = current.NTSCJ_IGT + current.NTSCJ_MS;
 		current.Map = current.NTSCJ_Map;
 		current.Results = current.NTSCJ_Results;
@@ -220,26 +154,6 @@ update
 		current.DigiR = current.J_DigiR;
 		current.DigiRF = current.J_DigiRF;
 		current.BackK = current.J_BackK;
-	}
-	else{
-		current.Time = current.PAL_IGT + current.PAL_MS;
-		current.Map = current.PAL_Map;
-		current.Results = current.PAL_Results;
-		//Items
-		current.FirstC = current.P_FirstC;
-		current.GuestK = current.P_GuestK;
-		current.IDCard = current.P_IDCard;
-		current.MaintK = current.P_MaintK;
-		current.Handle = current.P_Handle;
-		current.Crowbar = current.P_Crowbar;
-		current.CrewK = current.P_CrewK;
-		current.RecR = current.P_RecR;
-		current.SecK = current.P_SecK;
-		current.ElevL = current.P_ElevL;
-		current.PodB = current.P_PodB;
-		current.DigiR = current.P_DigiR;
-		current.DigiRF = current.P_DigiRF;
-		current.BackK = current.P_BackK;
 	}
 }
 
