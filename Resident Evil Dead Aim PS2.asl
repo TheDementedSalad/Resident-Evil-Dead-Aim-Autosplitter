@@ -43,11 +43,11 @@ startup
 	
 	settings.Add("Boss", false, "Boss Splits");
 	settings.CurrentDefaultParent = "Boss";
-	settings.Add("490", false, "Defeat Hunters");
-	settings.Add("100", false, "Defeat Tyrant");
-	settings.Add("910", false, "Defeat Pluto");
-	settings.Add("350", false, "Defeat Halbert");
-	settings.Add("430", false, "Defeat Morpheus 1");
+	settings.Add("Hunters", false, "Defeat Hunters");
+	settings.Add("100_110", false, "Defeat Tyrant");
+	settings.Add("910_560", false, "Defeat Pluto");
+	settings.Add("350_340", false, "Defeat Halbert");
+	settings.Add("Morpheus1", false, "Defeat Morpheus 1");
 	settings.CurrentDefaultParent = null;
 	
 	
@@ -130,31 +130,54 @@ init
 
 update
 {
-	if(timer.CurrentPhase == TimerPhase.NotRunning)
-	{
-		vars.completedSplits = new bool[50];
+	// get a casted (to dictionary) reference to current
+	// so we can manipulate it using dynamic keynames
+	var cur = current as IDictionary<string, object>;
+
+	// list of pc address names to be recreated when on emu
+	var names = new List<string>() { 
+		"IGT",
+		"MS",
+		"Map",
+		"Results",
+		"FirstC",
+		"GuestK",
+		"IDCard",
+		"MaintK",
+		"Handle",
+		"Crowbar",
+		"CrewK",
+		"RecR",
+		"SecK",
+		"ElevL",
+		"PodB",
+		"DigiR",
+		"DigiRF",
+		"BackK",
+	};
+
+	// (placeholder) have some logic to work out the version and create the prefix
+	string ver = null;
+
+	// assign version based on gamecode
+	if (current.J_Gamecode == "SLPM-65245") ver = "J_";
+
+	// if in a supported version of the game...
+	if (ver == null) return false;
+	// loop through each desired address...
+	foreach(string name in names) {
+		// set e.g. current.GameTime to the value at e.g. current.US_GameTime
+		cur[name] = cur[ver + name];
 	}
 	
-	if(current.NTSCJ_Gamecode == "SLPM-65245"){
-		current.Time = current.NTSCJ_IGT + current.NTSCJ_MS;
-		current.Map = current.NTSCJ_Map;
-		current.Results = current.NTSCJ_Results;
-		//Items
-		current.FirstC = current.J_FirstC;
-		current.GuestK = current.J_GuestK;
-		current.IDCard = current.J_IDCard;
-		current.MaintK = current.J_MaintK;
-		current.Handle = current.J_Handle;
-		current.Crowbar = current.J_Crowbar;
-		current.CrewK = current.J_CrewK;
-		current.RecR = current.J_RecR;
-		current.SecK = current.J_SecK;
-		current.ElevL = current.J_ElevL;
-		current.PodB = current.J_PodB;
-		current.DigiR = current.J_DigiR;
-		current.DigiRF = current.J_DigiRF;
-		current.BackK = current.J_BackK;
-	}
+	//GameTime
+	current.Time = current.IGT + current.MS;
+}
+
+onStart
+{
+	//Clear the variable on start
+	vars.completedSplits.Clear();
 }
 
 start
@@ -164,41 +187,80 @@ start
 
 split
 {
-	if (settings["FirstCP"] && current.FirstC == 1 && !vars.completedSplits[0])		{return vars.completedSplits[0]  = true;}
-	if (settings["FirstCU"] && current.FirstC == 100 && !vars.completedSplits[1])		{return vars.completedSplits[1]  = true;}
-	if (settings["GuestKP"] && current.GuestK == 1 && !vars.completedSplits[2])		{return vars.completedSplits[2]  = true;}
-	if (settings["GuestKD"] && current.GuestK == 2 && !vars.completedSplits[3])		{return vars.completedSplits[3]  = true;}
-	if (settings["GuestKU"] && current.GuestK == 100 && !vars.completedSplits[4])		{return vars.completedSplits[4]  = true;}
-	if (settings["IDCardP"] && current.IDCard == 1 && !vars.completedSplits[5])		{return vars.completedSplits[5]  = true;}
-	if (settings["IDCardU"] && current.IDCard == 100 && !vars.completedSplits[6])		{return vars.completedSplits[6]  = true;}
-	if (settings["MaintKP"] && current.MaintK == 1 && !vars.completedSplits[7])		{return vars.completedSplits[7] = true;}
-	if (settings["MaintKU"] && current.MaintK == 100 && !vars.completedSplits[8])		{return vars.completedSplits[8]  = true;}
-	if (settings["HandleP"] && current.Handle == 1 && !vars.completedSplits[9])		{return vars.completedSplits[9]  = true;}
-	if (settings["HandleU"] && current.Handle == 100 && !vars.completedSplits[10])		{return vars.completedSplits[10]  = true;}
-	if (settings["CrowbarP"] && current.Crowbar == 1 && !vars.completedSplits[11])		{return vars.completedSplits[11]  = true;}
-	if (settings["CrewKP"] && current.CrewK == 1 && !vars.completedSplits[12])		{return vars.completedSplits[12]  = true;}
-	if (settings["CrewKU"] && current.CrewK == 100 && !vars.completedSplits[13])		{return vars.completedSplits[13]  = true;}
-	if (settings["RecRP"] && current.RecR == 1 && !vars.completedSplits[14])		{return vars.completedSplits[14]  = true;}
-	if (settings["RecRU"] && current.RecR == 100 && !vars.completedSplits[15])		{return vars.completedSplits[15]  = true;}
-	if (settings["SecKP"] && current.SecK == 1 && !vars.completedSplits[16])		{return vars.completedSplits[16]  = true;}
-	if (settings["SecKU"] && current.SecK == 100 && !vars.completedSplits[17])		{return vars.completedSplits[17]  = true;}
-	if (settings["ElevLP"] && current.ElevL == 1 && !vars.completedSplits[18])		{return vars.completedSplits[18]  = true;}
-	if (settings["ElevLU"] && current.ElevL == 100 && !vars.completedSplits[19])		{return vars.completedSplits[19]  = true;}
-	if (settings["PodBP"] && current.PodB == 1 && !vars.completedSplits[20])		{return vars.completedSplits[20]  = true;}
-	if (settings["PodBU"] && current.PodB == 100 && !vars.completedSplits[21])		{return vars.completedSplits[21]  = true;}
-	if (settings["DigiRP"] && current.DigiR == 1 && !vars.completedSplits[22])		{return vars.completedSplits[22]  = true;}
-	if (settings["DigiRFP"] && current.DigiRF == 1 && !vars.completedSplits[23])		{return vars.completedSplits[23]  = true;}
-	if (settings["DigiRFU"] && current.DigiRF == 100 && !vars.completedSplits[24])		{return vars.completedSplits[24]  = true;}
-	if (settings["BackKP"] && current.BackK == 1 && !vars.completedSplits[25])		{return vars.completedSplits[25]  = true;}
-	if (settings["BackKU"] && current.BackK == 100 && !vars.completedSplits[26])		{return vars.completedSplits[26]  = true;}
+	//Create an empty setting
+	string setting = "";
 	
-	if (settings["490"] && current.Map == 490 && !vars.completedSplits[27])		{return vars.completedSplits[27]  = true;}
-	if (settings["100"] && current.Map == 100 && !vars.completedSplits[28])		{return vars.completedSplits[28]  = true;}
-	if (settings["910"] && current.Map == 910 && !vars.completedSplits[29])		{return vars.completedSplits[29]  = true;}
-	if (settings["350"] && current.Map == 350 && !vars.completedSplits[30])		{return vars.completedSplits[30]  = true;}
-	if (settings["430"] && current.Map == 430 && !vars.completedSplits[31])		{return vars.completedSplits[31]  = true;}
+	//Whenever the value of something here changes, it assigns the setting info. E.g if FirstC changes
+	//from 0 to 1 when you pick it up then it will pass FirstC_1 which we can then use as the split ID
+	if(current.FirstC != old.FirstC){
+		setting = "FirstC_" + current.FirstC;
+	}
+	if(current.GuestK != old.GuestK){
+		setting = "GuestK_" + current.GuestK;
+	}
+	if(current.IDCard != old.IDCard){
+		setting = "IDCard_" + current.IDCard;
+	}
+	if(current.MaintK != old.MaintK){
+		setting = "MaintK_" + current.MaintK;
+	}
+	if(current.Handle != old.Handle){
+		setting = "Handle_" + current.Handle;
+	}
+	if(current.Crowbar != old.Crowbar){
+		setting = "Crowbar_" + current.Crowbar;
+	}
+	if(current.CrewK != old.CrewK){
+		setting = "CrewK_" + current.CrewK;
+	}
+	if(current.RecR != old.RecR){
+		setting = "RecR_" + current.RecR;
+	}
+	if(current.SecK != old.SecK){
+		setting = "SecK_" + current.SecK;
+	}
+	if(current.ElevL != old.ElevL){
+		setting = "ElevL_" + current.ElevL;
+	}
+	if(current.PodB != old.PodB){
+		setting = "PodB_" + current.PodB;
+	}
+	if(current.DigiR != old.DigiR){
+		setting = "DigiR_" + current.DigiR;
+	}
+	if(current.DigiRF != old.DigiRF){
+		setting = "DigiRF_" + current.DigiRF;
+	}
+	if(current.BackK!= old.BackK){
+		setting = "BackK_" + current.BackK;
+	}
 	
+	//Same for current map
+	if(current.Map != old.Map){
+		setting = current.Map + "_" + old.Map;
+	}
+	
+	if(setting == "490_391" || setting == "490_392" || setting == "490_393"){
+		setting = "Hunters";
+	}
+	
+	if(setting == "430_410" || setting == "430_411" || setting == "430_412" || setting == "430_413" || setting == "430_414" ||
+		setting == "430_414" || setting == "430_415" || setting == "430_416" || setting == "430_417" || setting == "430_418"){
+			setting = "Morpheus1";
+	}
+	
+	//final split - always active
 	if(current.Results > 0 && old.Results == 0 && current.Map == 470){
+		setting = "Final";
+	}
+	
+	// Debug. Comment out before release (prints the setting to a debugger)
+    if (!string.IsNullOrEmpty(setting)){
+		print(setting);
+	}
+	
+	//Adds the split to completedSplits if our settings is enabled and contains the correct ID
+	if (settings.ContainsKey(setting) && settings[setting] && vars.completedSplits.Add(setting)) {
 		return true;
 	}
 }
@@ -216,4 +278,10 @@ isLoading
 reset
 {
 	return current.Time == 0 && current.Map == 0;
+}
+
+shutdown
+{
+	// Please don't remove this line from this block
+	vars.Helper.Dispose();
 }
