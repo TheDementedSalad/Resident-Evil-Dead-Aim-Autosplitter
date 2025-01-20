@@ -1,5 +1,5 @@
-//Resident Evil: Dead Aim IGT Timer & Autosplitter V1.0.5 4/10/2023
-//Supports In Game Time & Autosplits
+//Resident Evil: Dead Aim IGT Timer & Room Autosplitter V1.0 07/09/2023
+//Supports In Game Time & Autosplits on select doors
 
 //emu-help tool created by jujstme - https://github.com/Jujstme
 //script & ID's by TheDementedSalad
@@ -8,10 +8,9 @@ state("LiveSplit") {}
 
 startup
 {
-	// Creates a persistent instance of the PS2 class (for PS2 emulators)
+	//Creates a persistent instance of the PS2 class (for PS2 emulators)
+	//If you want to change it to another emulator type, change the "PS2" to say "PS1" if the splitter is for a PS1 Emu game
 	Assembly.Load(File.ReadAllBytes("Components/emu-help-v2")).CreateInstance("PS2");
-	
-	vars.bitCheck = new Func<byte, int, bool>((byte val, int b) => (val & (1 << b)) != 0);
 
 	// You can look up for known IDs on https://psxdatacenter.com/
 	vars.Helper.Load = (Func<dynamic, bool>)(emu => 
@@ -23,7 +22,7 @@ startup
 		//-------------------------------------------------------------------------------------------------------------
 		//General Game Info
 		emu.Make<int>("J_IGT", 0x262DBC);
-        	emu.Make<float>("J_MS", 0x31A3B0);
+        emu.Make<float>("J_MS", 0x31A3B0);
 		emu.Make<int>("J_Map", 0x3986C0);
 		emu.Make<int>("J_Results", 0x254144);
 		//Key Items
@@ -41,10 +40,53 @@ startup
 		emu.Make<byte>("J_DigiR", 0x262B9C);
 		emu.Make<byte>("J_DigiRF", 0x262BA0);
 		emu.Make<byte>("J_BackK", 0x262BA4);
+		
+		/*
+        emu.Make<int>("U_IGT", 0x30D054);
+        emu.Make<float>("U_MS", 0x3854F0);
+		emu.Make<int>("U_Map", 0x5189C0);
+		emu.Make<int>("U_Results", 0x2A4054);
+		//Key Items
+		emu.Make<byte>("U_FirstC", 0x2A3E1C);
+		emu.Make<byte>("U_GuestK", 0x2A3E00);
+		emu.Make<byte>("U_IDCard", 0x2A3E04);
+		emu.Make<byte>("U_MaintK", 0x2A3E08);
+		emu.Make<byte>("U_Handle", 0x2A3E0C);
+		emu.Make<byte>("U_Crowbar", 0x2A3E10);
+		emu.Make<byte>("U_CrewK", 0x2A3E14);
+		emu.Make<byte>("U_RecR", 0x2A3E18);
+		emu.Make<byte>("U_SecK", 0x2A3EDC);
+		emu.Make<byte>("U_ElevL", 0x2A3E24);
+		emu.Make<byte>("U_PodB", 0x2A3E28);
+		emu.Make<byte>("U_DigiR", 0x2A3E2C);
+		emu.Make<byte>("U_DigiRF", 0x2A3E30);
+		emu.Make<byte>("U_BackK", 0x2A3E34);
+	
+	
+        emu.Make<int>("P_IGT", 0x2A4A54);
+        emu.Make<float>("P_MS", 0x31CFF8);
+		emu.Make<int>("P_Map", 0x4B34C0);
+		emu.Make<int>("P_Results", 0x2DE164);
+		//Key Items
+		emu.Make<byte>("P_FirstC", 0x2A481C);
+		emu.Make<byte>("P_GuestK", 0x2A4800);
+		emu.Make<byte>("P_IDCard", 0x2A4804);
+		emu.Make<byte>("P_MaintK", 0x2A4808);
+		emu.Make<byte>("P_Handle", 0x2A480C);
+		emu.Make<byte>("P_Crowbar", 0x2A4810);
+		emu.Make<byte>("P_CrewK", 0x2A4814);
+		emu.Make<byte>("P_RecR", 0x2A4818);
+		emu.Make<byte>("P_SecK", 0x2A48DC);
+		emu.Make<byte>("P_ElevL", 0x2A4824);
+		emu.Make<byte>("P_PodB", 0x2A4828);
+		emu.Make<byte>("P_DigiR", 0x2A482C);
+		emu.Make<byte>("P_DigiRF", 0x2A4830);
+		emu.Make<byte>("P_BackK", 0x2A4834);
+		*/
         return true;
     });
 	
-	settings.Add("Note", true, "Please Restart Game Every Run So IGT Correctly Resets");
+	settings.Add("Note", true, "Please Restart Game Ever Run So IGT Correctly Resets");
 	
 	settings.Add("Boss", false, "Boss Splits");
 	settings.CurrentDefaultParent = "Boss";
@@ -55,74 +97,73 @@ startup
 	settings.Add("Morpheus1", false, "Defeat Morpheus 1");
 	settings.CurrentDefaultParent = null;
 	
-	
 	settings.Add("Item", false, "Item Splitter");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("FirstC", false, "1st Class Key");
 	settings.CurrentDefaultParent = "FirstC";
-	settings.Add("FirstCP", false, "Pick Up 1st Class Key");
-	settings.Add("FirstCU", false, "Use 1st Class Key");
+	settings.Add("FirstC_1", false, "Pick Up 1st Class Key");
+	settings.Add("FirstC_100", false, "Use 1st Class Key");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("GuestK", false, "Guest Keycard");
 	settings.CurrentDefaultParent = "GuestK";
-	settings.Add("GuestKP", false, "Pick Up Guest Keycard");
-	settings.Add("GuestKD", false, "Used Card to Unlock Door");
-	settings.Add("GuestKU", false, "Used Card On Panel Control");
+	settings.Add("GuestK_1", false, "Pick Up Guest Keycard");
+	settings.Add("GuestK_2", false, "Used Card to Unlock Door");
+	settings.Add("GuestK_100", false, "Used Card On Panel Control");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("IDCard", false, "ID Card");
 	settings.CurrentDefaultParent = "IDCard";
-	settings.Add("IDCardP", false, "Pick Up ID Card");
-	settings.Add("IDCardU", false, "Use ID Card");
+	settings.Add("IDCard_1", false, "Pick Up ID Card");
+	settings.Add("IDCard_100", false, "Use ID Card");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("MaintK", false, "Maintenance Key");
 	settings.CurrentDefaultParent = "MaintK";
-	settings.Add("MaintKP", false, "Pick Up Maintenance Key");
-	settings.Add("MaintKU", false, "Use Maintenance Key");
+	settings.Add("MaintK_1", false, "Pick Up Maintenance Key");
+	settings.Add("MaintK_100", false, "Use Maintenance Key");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("Handle", false, "Handle");
 	settings.CurrentDefaultParent = "Handle";
-	settings.Add("HandleP", false, "Pick Up Handle");
-	settings.Add("HandleU", false, "Use Handle");
+	settings.Add("Handle_1", false, "Pick Up Handle");
+	settings.Add("Handle_100", false, "Use Handle");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("Crowbar", false, "Crowbar");
 	settings.CurrentDefaultParent = "Crowbar";
-	settings.Add("CrowbarP", false, "Pick Up Crowbar");
+	settings.Add("Crowbar_1", false, "Pick Up Crowbar");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("CrewK", false, "Crewman's Keycard");
 	settings.CurrentDefaultParent = "CrewK";
-	settings.Add("CrewKP", false, "Pick Up Crewman's Keycard");
-	settings.Add("CrewKU", false, "Use Crewman's Keycard");
+	settings.Add("CrewK_1", false, "Pick Up Crewman's Keycard");
+	settings.Add("CrewK_100", false, "Use Crewman's Keycard");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("RecR", false, "Recreation Room Key");
 	settings.CurrentDefaultParent = "RecR";
-	settings.Add("RecRP", false, "Pick Up Recreation Room Key");
-	settings.Add("RecRU", false, "Use Recreation Room Key");
+	settings.Add("RecR_1", false, "Pick Up Recreation Room Key");
+	settings.Add("RecR_100", false, "Use Recreation Room Key");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("SecK", false, "Sector Admin Key");
 	settings.CurrentDefaultParent = "SecK";
-	settings.Add("SecKP", false, "Pick Up Sector Admin Key");
-	settings.Add("SecKU", false, "Use Sector Admin Key");
+	settings.Add("SecK_1", false, "Pick Up Sector Admin Key");
+	settings.Add("SecK_100", false, "Use Sector Admin Key");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("ElevL", false, "Elevator Keycard");
 	settings.CurrentDefaultParent = "ElevL";
-	settings.Add("ElevLP", false, "Pick Up Elevator Keycard");
-	settings.Add("ElevLU", false, "Use Elevator Keycard");
+	settings.Add("ElevL_1", false, "Pick Up Elevator Keycard");
+	settings.Add("ElevL_100", false, "Use Elevator Keycard");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("PodB", false, "Pod Bay Keycard");
 	settings.CurrentDefaultParent = "PodB";
-	settings.Add("PodBP", false, "Pick Up Pod Bay Keycard");
-	settings.Add("PodBU", false, "Use Pod Bay Keycard");
+	settings.Add("PodB_1", false, "Pick Up Pod Bay Keycard");
+	settings.Add("PodB_100", false, "Use Pod Bay Keycard");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("DigiR", false, "Digital Recorder");
 	settings.CurrentDefaultParent = "DigiR";
-	settings.Add("DigiRP", false, "Pick Up Digital Recorder");
-	settings.Add("DigiRFP", false, "Record Morpheus' Voice");
-	settings.Add("DigiRFU", false, "Use Digital Recorder (Full)");
+	settings.Add("DigiR_1", false, "Pick Up Digital Recorder");
+	settings.Add("DigiRF_1", false, "Record Morpheus' Voice");
+	settings.Add("DigiRF_100", false, "Use Digital Recorder (Full)");
 	settings.CurrentDefaultParent = "Item";
 	settings.Add("BackK", false, "Backyard Key");
 	settings.CurrentDefaultParent = "BackK";
-	settings.Add("BackKP", false, "Pick Up Backyard Key");
-	settings.Add("BackKU", false, "Use Backyard Key");
+	settings.Add("BackK_1", false, "Pick Up Backyard Key");
+	settings.Add("BackK_100", false, "Use Backyard Key");
 	settings.CurrentDefaultParent = null;
 	
 	settings.Add("Final", true, "Final Split - Splits On Results Screen (Always Active)");
@@ -130,7 +171,8 @@ startup
 
 init
 {
-	vars.completedSplits = new bool[50];
+	//Create a list that can hold our completed split strings
+	vars.completedSplits = new HashSet<string>();
 }
 
 update
@@ -187,6 +229,7 @@ onStart
 
 start
 {
+	//Start condition
 	return current.Time != old.Time && old.Time < 1 && current.Map == 258;
 }
 
@@ -284,6 +327,7 @@ reset
 {
 	return current.Time == 0 && current.Map == 0;
 }
+
 
 shutdown
 {
