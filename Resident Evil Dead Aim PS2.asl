@@ -16,11 +16,16 @@ startup
 	// You can look up for known IDs on https://psxdatacenter.com/
 	vars.Helper.Load = (Func<dynamic, bool>)(emu => 
     {
-		emu.MakeString("NTSCJ_Gamecode", 10, 0x2CEE17);		//SLPM-65245
-        	emu.Make<int>("NTSCJ_IGT", 0x262DBC);
-        	emu.Make<float>("NTSCJ_MS", 0x31A3B0);
-		emu.Make<int>("NTSCJ_Map", 0x3986C0);
-		emu.Make<int>("NTSCJ_Results", 0x254144);
+		//Address of Gamecode
+		emu.MakeString("U_Gamecode", 10, 0x307397);		//SLUS-20669
+		emu.MakeString("J_Gamecode", 10, 0x2CEE17);		//SLPM-65245
+		emu.MakeString("P_Gamecode", 10, 0x3082CC);		//SLES-51448
+		//-------------------------------------------------------------------------------------------------------------
+		//General Game Info
+		emu.Make<int>("J_IGT", 0x262DBC);
+        	emu.Make<float>("J_MS", 0x31A3B0);
+		emu.Make<int>("J_Map", 0x3986C0);
+		emu.Make<int>("J_Results", 0x254144);
 		//Key Items
 		emu.Make<byte>("J_FirstC", 0x262B8C);
 		emu.Make<byte>("J_GuestK", 0x262B70);
