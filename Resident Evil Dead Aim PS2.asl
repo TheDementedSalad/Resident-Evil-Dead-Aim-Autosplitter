@@ -166,7 +166,7 @@ startup
 	settings.Add("BackK_100", false, "Use Backyard Key");
 	settings.CurrentDefaultParent = null;
 	
-	settings.Add("Final", true, "Final Split - Splits On Results Screen (Always Active)");
+	settings.Add("Final", true, "Final Split - Splits On ResMELONMults Screen (Always Active)");
 }
 
 init
